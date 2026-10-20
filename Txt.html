@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Novel Translator & Reader (Super Fast)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0f12;
+            --card-bg: rgba(22, 27, 34, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f0f6fc;
+            --text-muted: #8b949e;
+            --accent-glow: #f59e0b;
+            --accent-btn: #d97706;
+            --accent-hover: #b45309;
+            --input-bg: #161b22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px 15px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0 10px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        #google_translate_element {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .goog-te-gadget-simple {
+            background-color: #1f242d !important;
+            border: 1px solid var(--card-border) !important;
+            padding: 8px 14px !important;
+            border-radius: 8px !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        .goog-te-gadget-simple span {
+            color: var(--text-main) !important;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Dropzone */
+        .dropzone {
+            border: 2px dashed rgba(245, 158, 11, 0.4);
+            border-radius: 12px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(245, 158, 11, 0.02);
+            margin-bottom: 15px;
+        }
+
+        .dropzone:hover, .dropzone.dragover {
+            border-color: var(--accent-glow);
+            background: rgba(245, 158, 11, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .dropzone-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input[type="file"] { display: none; }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: var(--accent-btn);
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #21262d;
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-secondary:hover {
+            background: #30363d;
+        }
+
+        .btn-fast {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .btn-fast:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: var(--input-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 10px;
+        }
+
+        textarea:focus {
+            border-color: var(--accent-glow);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            display: none;
+            margin: 12px 0;
+            background: var(--input-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 18px;
+            border: 1px solid var(--card-border);
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f59e0b, #10b981);
+            transition: width 0.15s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 10px 0;
+            padding: 0 5px;
+        }
+
+        .font-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .font-btn {
+            background: #21262d;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Continuous Single Page Screen */
+        .reader-box {
+            background: #12161c;
+            padding: 30px;
+            border-radius: 12px;
+            min-height: 400px;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            word-wrap: break-word;
+            border: 1px solid var(--card-border);
+            position: relative;
+        }
+
+        .reader-box p {
+            margin-bottom: 1.2em;
+            text-align: left;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            text-align: center;
+            font-style: italic;
+            margin-top: 130px;
+        }
+
+        .goog-te-banner-frame { display: none !important; }
+        body { top: 0px !important; }
+
+        @media (max-width: 600px) {
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .btn-group { justify-content: space-between; }
+            .reader-box { padding: 18px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body data-filename="novel.txt">
+
+    <div class="container">
+        <header>
+            <h1>📖 Pro Novel Translator</h1>
+            <p>Super Fast Continuous Single-Page Translator & Reader</p>
+        </header>
+
+        <div id="google_translate_element"></div>
+
+        <div class="glass-card">
+            <!-- File Drag and Drop Zone -->
+            <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                <span class="dropzone-icon">📁</span>
+                <strong style="color: var(--text-main);">Click to Upload or Drag & Drop .TXT File</strong>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Large single-page novels load instantly</p>
+            </div>
+            <input type="file" id="fileInput" accept=".txt">
+
+            <textarea id="pasteInput" placeholder="Ya fir yahan direct novel text paste karein..."></textarea>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <button class="btn btn-secondary" onclick="loadPastedText()">📖 Load Text to Reader</button>
+                <button class="btn btn-fast" onclick="startFastFullTranslation()">⚡ Fast Full Translate (Hindi)</button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+
+            <!-- Controls & Tools -->
+            <div class="toolbar">
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="copyText()">📋 Copy</button>
+                    <button class="btn" onclick="downloadTXT()">💾 Save TXT (H_)</button>
+                    <button class="btn btn-secondary" onclick="clearContent()">🗑️ Clear</button>
+                </div>
+
+                <div class="font-controls">
+                    <span>Font Size:</span>
+                    <button class="font-btn" onclick="changeFontSize(-1)">-</button>
+                    <button class="font-btn" onclick="changeFontSize(1)">+</button>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <span id="statWords">Words: 0</span>
+                <span id="statChars">Characters: 0</span>
+                <span id="statTime">Est. Read Time: 0 min</span>
+            </div>
+
+            <!-- Main Reader Box (Continuous Long Screen) -->
+            <div class="reader-box" id="novelContent">
+                <div class="placeholder-text">
+                    Yahan aapka poora novel ek hi single page me load hoga.<br>
+                    Upar se <b>.txt file upload</b> karein, aur turant poora translate karne ke liye <b>⚡ Fast Full Translate</b> dabayein!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'hi,en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        let currentFontSize = 18;
+        let originalFileName = "novel.txt";
+        let rawParagraphs = [];
+
+        const fileInput = document.getElementById('fileInput');
+        const dropzone = document.getElementById('dropzone');
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+            }, false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            originalFileName = file.name;
+            if (!originalFileName.endsWith('.txt')) { originalFileName += '.txt'; }
+            document.body.setAttribute('data-filename', originalFileName);
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                processAndLoadText(e.target.result);
+                document.getElementById('pasteInput').value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+
+        function loadPastedText() {
+            const text = document.getElementById('pasteInput').value;
+            if(text.trim() !== "") {
+                processAndLoadText(text);
+            } else {
+                alert("Pehle textarea me kuch text paste karein!");
+            }
+        }
+
+        // Renders all paragraphs at once into DOM to prevent viewport-delay translation
+        function processAndLoadText(fullText) {
+            rawParagraphs = fullText.split(/\r?\n+/).filter(p => p.trim().length > 0);
+            
+            const readerBox = document.getElementById('novelContent');
+            readerBox.innerHTML = '';
+
+            const fragment = document.createDocumentFragment();
+            rawParagraphs.forEach(pText => {
+                const p = document.createElement('p');
+                p.textContent = pText;
+                fragment.appendChild(p);
+            });
+            readerBox.appendChild(fragment);
+
+            updateStats(fullText);
+        }
+
+        function updateStats(text) {
+            const charCount = text.length;
+            const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const readTime = Math.ceil(wordCount / 200);
+
+            document.getElementById('statWords').innerText = `Words: ${wordCount.toLocaleString()}`;
+            document.getElementById('statChars').innerText = `Characters: ${charCount.toLocaleString()}`;
+            document.getElementById('statTime').innerText = `Est. Read Time: ${readTime} min`;
+        }
+
+        // High-Speed Parallel Batch Translation Engine
+        async function startFastFullTranslation() {
+            if (!rawParagraphs || rawParagraphs.length === 0) {
+                alert("Pehle koi file upload ya text paste karein!");
+                return;
+            }
+
+            const readerBox = document.getElementById('novelContent');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressText.innerText = '0%';
+
+            readerBox.innerHTML = ''; // Clear for fast live translation stream
+
+            const BATCH_SIZE = 5; // Translates 5 paragraphs simultaneously for maximum speed
+            let completed = 0;
+
+            for (let i = 0; i < rawParagraphs.length; i += BATCH_SIZE) {
+                const batch = rawParagraphs.slice(i, i + BATCH_SIZE);
+
+                const batchPromises = batch.map(async (text) => {
+                    try {
+                        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=hi&dt=t&q=${encodeURIComponent(text)}`);
+                        const data = await res.json();
+                        if (data && data[0]) {
+                            return data[0].map(item => item[0]).join('');
+                        }
+                    } catch (e) {
+                        console.error("Translation error:", e);
+                    }
+                    return text;
+                });
+
+                const results = await Promise.all(batchPromises);
+
+                results.forEach(translatedText => {
+                    const p = document.createElement('p');
+                    p.textContent = translatedText;
+                    readerBox.appendChild(p);
+                });
+
+                completed += batch.length;
+                if (completed > rawParagraphs.length) completed = rawParagraphs.length;
+
+                const percent = Math.round((completed / rawParagraphs.length) * 100);
+                progressBar.style.width = percent + '%';
+                progressText.innerText = percent + '%';
+            }
+
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 1000);
+        }
+
+        function changeFontSize(delta) {
+            currentFontSize += delta;
+            if (currentFontSize < 12) currentFontSize = 12;
+            if (currentFontSize > 32) currentFontSize = 32;
+            document.getElementById('novelContent').style.fontSize = currentFontSize + 'px';
+        }
+
+        function clearContent() {
+            rawParagraphs = [];
+            document.getElementById('novelContent').innerHTML = '<div class="placeholder-text">Yahan aapka poora novel ek hi single page me load hoga...</div>';
+            document.getElementById('pasteInput').value = '';
+            document.getElementById('fileInput').value = '';
+            document.body.setAttribute('data-filename', 'novel.txt');
+            updateStats('');
+        }
+
+        function copyText() {
+            const text = document.getElementById('novelContent').innerText;
+            if(!text || text.includes("Yahan aapka poora novel")) {
+                alert("Copy karne ke liye koi text nahi hai!");
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Poora Novel Text Copy ho gaya!");
+            });
+        }
+
+        // Saves file with 'H_' prefix automatically
+        function downloadTXT() {
+            const readerBox = document.getElementById('novelContent');
+            const text = readerBox.innerText;
+
+            if(!text || text.includes("Yahan aapka poora novel")) {
+                alert("Save karne ke liye koi text nahi hai!");
+                return;
+            }
+            
+            let baseName = document.body.getAttribute('data-filename') || "novel.txt";
+            if (baseName.startsWith("H_")) {
+                baseName = baseName.substring(2);
+            }
+            const finalFileName = "H_" + baseName;
+
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = finalFileName;
+            
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
